@@ -1,17 +1,21 @@
 # Production systems — case studies
 
-The code for these systems is **private**: they are client and employer systems (a university ERP and a power-plant maintenance platform). I cannot open-source them, so this repo documents what I built instead — architecture, scale, and the decisions behind them.
+The code for these systems is **private** (client and employer systems), so this repo documents what I built instead — the real architecture, domain models and decisions, written from the codebases themselves.
 
-I designed, built and still operate both **alone**, since 2023: my architecture, my code, my pager.
+I designed, built and still operate both **alone**: my architecture, my code, my pager.
 
-| Case study | Scale | Stack |
-|---|---|---|
-| [The Two Rivers — university ERP](./two-rivers-erp.md) | 5 colleges · 200+ staff daily | Django 4 · PostgreSQL · HTMX · docxtpl |
-| [KMS — plant maintenance platform](./kms-maintenance-platform.md) | 2 power plants · 400+ users | Django 4.2 · PostgreSQL · Docker |
-| [Claude Code worktree tooling](./claude-code-worktree-tooling.md) | my daily workflow | Claude Code · git worktrees |
+| Case study | Scale | Size | Core stack |
+|---|---|---|---|
+| [**The Two Rivers** — university ERP](./two-rivers-erp.md) | 5 colleges · 200+ staff daily | 7 apps · 73 models · ~48k LOC | Django 4 · PostgreSQL · HTMX · docxtpl |
+| [**KMS** — plant operations platform](./kms-maintenance-platform.md) | 2 power plants · 400+ users | 11 apps · ~90 models · 900 commits | Django 4.2 · PostgreSQL · Docker |
+| [Claude Code worktree tooling](./claude-code-worktree-tooling.md) | my daily workflow | — | Claude Code · git worktrees |
+
+Highlights if you only have two minutes:
+- Two Rivers: **three-layer multi-tenancy** (middleware thread-local + auto-filtering manager + form injection) and a self-audit that found and fixed **12 cross-tenant leaks** with attack-scenario regression tests
+- KMS: a **Permit-To-Work safety interlock** (6 permit state machines gating work-order start/completion/printing) and an **OAuth2 MCP server** exposing plant analytics to AI clients
 
 **Day job:** backend engineer at [Apicbase](https://apicbase.com) (multi-tenant food-tech SaaS, 500+ client locations) — event-driven inventory pipeline on Amazon SQS + Celery, per-object authorization across 500+ tenants, CI from 2h to 49min.
 
-**Before that (2021-2023):** Head of the Software Systems & Networks Unit at Al-Hadi University College — built V1 of the college management platform solo (2,000+ students: digital admissions with electronic payments, student self-service portal, document automation), then led the 3-engineer team.
+**Before that (2021-2023):** Head of the Software Systems & Networks Unit at Al-Hadi University College — built V1 of the college management platform solo (2,000+ students), then led the 3-engineer team.
 
 📫 hussinthamer211@gmail.com · [LinkedIn](https://www.linkedin.com/in/hosin211)
