@@ -1,38 +1,44 @@
-# Two Rivers ERP — university back office, built solo
+# The Two Rivers — university ERP, built and run solo
 
 **Client:** Al-Nahrain University (Baghdad)
-**Scale:** used daily by 200+ staff
-**Status:** live for years, still operated and extended by me
+**Scale:** 5 colleges · used daily by 200+ staff
+**Status:** built and maintained solo since 2023, still live
 **Code:** private (client system)
 
 ## What it is
 
-A web ERP that runs the university's back office: HR records, payroll, finance and internal document workflows. Before it, these processes ran on paper and spreadsheets across departments.
+One vision: replace paper and Excel across the university with a single digital system. Two Rivers covers:
+
+- **every student record**, from admission to graduation
+- **every employee's payroll and HR data**
+- **every financial transaction**
+- **every research publication**
+- and it **generates every official Arabic letter and certificate** the university issues
 
 ## Stack
 
-Django · Django REST Framework · PostgreSQL · Celery + Redis · Vue.js · Docker · Nginx
+Django 4 · PostgreSQL · HTMX · docxtpl · Sentry
+
+Server-rendered Django with HTMX for interactivity — no SPA. For a system one engineer runs for years, fewer moving parts is a feature.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-    U[Staff browsers<br/>200+ daily users] --> N[Nginx]
-    N --> A[Django app<br/>DRF API + server-rendered views]
+    C1[College 1] & C2[College 2] & C3[...5 colleges] --> A[Django 4 + HTMX<br/>multi-tenant app]
     A --> P[(PostgreSQL)]
-    A --> R[(Redis)]
-    A --> C[Celery workers<br/>payroll runs, reports, notifications]
-    C --> P
+    A --> D[docxtpl<br/>official Arabic letters & certificates]
+    A --> S[Sentry<br/>error tracking]
 ```
 
-A deliberately boring monolith: one Django project, one PostgreSQL database, Celery for everything slow (payroll calculation runs, report generation, notifications). Boring is what a small operations team can actually keep alive for years.
+Custom **multi-tenant architecture**: each college is a tenant inside one deployment, with a bespoke permission system deciding who sees which college's records.
 
 ## Problems worth mentioning
 
-- **Payroll correctness.** Salary rules with allowances and deductions per employee category. Payroll runs are Celery jobs producing an auditable result per employee per month — never computed ad hoc in a request.
-- **Permissions that match a real university.** Department heads see their department, HR sees everyone, finance approves but does not edit. Role and object-level checks live at the API layer.
-- **Migration from paper.** Historical records were imported in bulk; data-cleaning scripts and validation reports mattered as much as application code.
+- **Cross-tenant security.** Ran a security hardening pass on my own system and found and fixed **12 cross-tenant data leaks in production**. Hunting your own bugs across tenant boundaries teaches you more about authorization than any framework doc.
+- **Official documents as a first-class feature.** Universities live on stamped Arabic letters and certificates. Template-based generation (docxtpl) turned a queue at an office into a button.
+- **Everything in one system.** Students, payroll, finance and research publications share one data model — the value is that the registrar, HR and finance stopped reconciling three different sources of truth.
 
 ## What operating it taught me
 
-When you are the only engineer, every architecture decision is a support decision: simple deploys, obvious logs, conservative dependencies. It shaped how I write code at my day job — I optimize for the person who gets paged, because for years that person was me.
+When you are the only engineer, every architecture decision is a support decision: server-rendered pages, one database, obvious logs, conservative dependencies. I optimize for the person who gets paged, because that person is me.
