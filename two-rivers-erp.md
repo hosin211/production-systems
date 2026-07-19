@@ -18,51 +18,6 @@ Arabic-first (RTL), multi-tenant, server-rendered. One vision: replace paper and
 | `notifications` | Notifications attachable to any record via GenericForeignKey |
 | `apicBase` | The infrastructure core: `Entity` base model, soft-delete, and the tenancy `SmartManager` |
 
-## Domain model (the real one)
-
-```mermaid
-erDiagram
-    CollegeTenant ||--o{ User : "scopes"
-    CollegeTenant ||--o{ StudentBiography : "scopes"
-    CollegeTenant ||--o{ Department : "scopes"
-    StudentBiography }o--|| Department : "belongs to"
-    StudentBiography }o--|| Stage : "current stage"
-    StudentBiography ||--o{ Score : "grades"
-    StudentBiography ||--o{ StudentPayment : "tuition"
-    StudentBiography ||--o{ AnnualInstallment : "installments"
-    StudentBiography ||--o{ DiscussionCommittee : "defense"
-    User ||--o{ Research : "author / co-authors"
-    User ||--o{ Activity : "academic activity"
-    User }o--o{ AdministrativeAuthority : "UserPermission (per college, read/write)"
-    Book ||--o{ ExtensionBook : "extensions"
-    Book ||--o{ ReturnOrder : "return orders"
-    Book }o--|| EntryNumbering : "registry number"
-    Notification }o--|| AnyEntity : "GenericFK"
-    UserActivity }o--|| User : "audit trail"
-```
-
-Two details worth noticing:
-
-- **Students are data, not accounts.** `StudentBiography` has no login. `UndergraduateStudent` and `GraduateStudent` are **proxy models** whose managers encode business rules (e.g. graduate students are always morning-shift), so a dashboard can't accidentally mix cohorts.
-- **Official letters are a first-class domain.** The `books` registry models the university's real paper bureaucracy — extensions, postponements, return orders, registry numbering — instead of pretending it doesn't exist.
-
-## Multi-tenancy: three cooperating layers
-
-```mermaid
-flowchart LR
-    R[Request] --> M[TenantMiddleware<br/>resolves tenant, thread-local set_current_tenant]
-    M --> V[View]
-    V --> SM[SmartManager<br/>auto-filters every queryset by current tenant + soft-delete]
-    SM --> P[(PostgreSQL<br/>shared DB, college_tenant FK)]
-    V --> F[TenantFormMixin<br/>strips + re-injects tenant on save]
-```
-
-1. **`TenantMiddleware`** resolves the tenant per request into thread-local storage. Regular users are locked to their own college; superusers switch via a **session key** — never a URL parameter.
-2. **`SmartManager`** — one manager that detects `college_tenant` and `deleted_date` on any model and default-filters every query. A model opts into tenancy just by declaring the FK. It replaced five hand-written managers. `objects` = tenant-scoped and alive; `all_objects` = admin-only escape hatch.
-3. **`TenantFormMixin`** strips the tenant field from every form and re-injects it server-side — users cannot spoof their college through form data.
-
-**Then I attacked my own system:** a cross-tenant security audit found **12 leaks in production** (unfiltered filter-dropdowns, `?college=<id>` URL-parameter leakage in dashboard views). All fixed, documented, and locked in with **30+ regression tests written as attack scenarios**.
-
 ## The permission refactor
 
 The original design chained five hops (`given_authority → group_authority → can_edit_group → …`). I replaced it with a direct `UserPermission` — per college, per section, read/write — **keyed by URL name** and enforced by `read_ / write_ / action_permission_required` decorators, with a management command that migrated all existing grants. Authorization you can reason about in one query.

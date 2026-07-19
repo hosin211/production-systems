@@ -11,7 +11,7 @@ I designed, built and still operate both **alone**: my architecture, my code, my
 | [Claude Code worktree tooling](./claude-code-worktree-tooling.md) | my daily workflow | — | Claude Code · git worktrees |
 
 Highlights if you only have two minutes:
-- Two Rivers: **three-layer multi-tenancy** (middleware thread-local + auto-filtering manager + form injection) and a self-audit that found and fixed **12 cross-tenant leaks** with attack-scenario regression tests
+- Two Rivers: multi-tenant across 5 colleges, with a self-audit that found and fixed **12 cross-tenant data leaks** in production, locked in with regression tests
 - KMS: a **Permit-To-Work safety interlock** (6 permit state machines gating work-order start/completion/printing) and an **OAuth2 MCP server** exposing plant analytics to AI clients
 
 **Day job:** backend engineer at [Apicbase](https://apicbase.com) (multi-tenant food-tech SaaS, 500+ client locations) — event-driven inventory pipeline on Amazon SQS + Celery, per-object authorization across 500+ tenants, CI from 2h to 49min.
