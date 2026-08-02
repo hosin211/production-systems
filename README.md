@@ -14,7 +14,7 @@ Highlights if you only have two minutes:
 - Two Rivers: multi-tenant across 5 colleges, with a self-audit that found and fixed **12 cross-tenant data leaks** in production, locked in with regression tests
 - KMS: a **Permit-To-Work safety interlock** (6 permit state machines gating work-order start/completion/printing) and an **OAuth2 MCP server** exposing plant analytics to AI clients
 
-**Day job:** backend engineer at [Apicbase](https://apicbase.com) (multi-tenant food-tech SaaS, 500+ client locations) — event-driven inventory pipeline on Amazon SQS + Celery, per-object authorization across 500+ tenants, CI from 2h to 49min.
+**Day job:** backend engineer at [Apicbase](https://apicbase.com) (multi-tenant food-tech SaaS, 500+ client locations) — event-driven inventory pipeline on Amazon SQS + Celery, per-object authorization across every tenant, CI from 2h to 49min.
 
 **Before that (2021-2023):** Head of the Software Systems & Networks Unit at Al-Hadi University College — built V1 of the college management platform solo (2,000+ students), then led the 3-engineer team.
 
