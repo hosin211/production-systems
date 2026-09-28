@@ -1,6 +1,6 @@
 # The Two Rivers — university ERP, built and run solo
 
-**Client:** Al-Nahrain University (Baghdad) · **Scale:** 5 colleges, 200+ staff daily
+**Client:** Al-Nahrain University (Baghdad) · **Scale:** every college of the university (it started in the College of Information Engineering), 200+ staff daily
 **Size:** 7 Django apps · 73 models · 385 migrations · ~48,000 lines of Python · 140 templates
 **Status:** built and maintained solo since 2023, live · **Code:** private (client system)
 

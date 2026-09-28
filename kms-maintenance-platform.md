@@ -1,6 +1,6 @@
 # KMS (Keppt Management System) — plant operations platform, built and run solo
 
-**Users:** 400+ employees across two combined-cycle power plants
+**Users:** 200+ engineers at each of two combined-cycle power plants, each plant on its own instance
 **Size:** 11 Django apps · ~90 models · 118 migrations · ~20,000 lines of Python · 900 commits over 2.5 years, one author
 **Status:** live in daily plant operations since 2023 · **Code:** private (industrial client system)
 
