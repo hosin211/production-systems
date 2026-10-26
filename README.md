@@ -16,6 +16,6 @@ Highlights if you only have two minutes:
 
 **Day job:** backend engineer at [Apicbase](https://apicbase.com) (multi-tenant food-tech SaaS, 500+ client locations) — event-driven inventory pipeline on Amazon SQS + Celery, per-object authorization across every tenant, CI from 2h to 49min.
 
-**Before that (2021-2023):** Head of the Software Systems & Networks Unit at Al-Hadi University College — built V1 of the college management platform solo (2,000+ students), then led the 3-engineer team.
+**Before that (2021-2023):** Head of the Software Systems & Networks Unit at Al-Hadi University College — built V1 of the college management platform solo (4,000+ new students a year), then led the 3-engineer team.
 
 📫 hussinthamer211@gmail.com · [LinkedIn](https://www.linkedin.com/in/hosin211)
